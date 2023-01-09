@@ -1,0 +1,783 @@
+type AccountProfile {
+  accountId: UUID!
+  addresses: NetAddresses!
+  email: String
+  activated: Boolean!
+  name: String
+  encryptedPrivateKey: String
+  settings: AccountSettings
+  isScholar: Boolean!
+  referral: AccountReferral
+}
+
+type AccountReferral {
+  code: String!
+  address: String!
+  addedAt: Int!
+}
+
+type AccountSettings {
+  unsubscribeNotificationEmail: Boolean!
+}
+
+type Asset {
+  orderId: Int!
+  erc: Erc!
+  address: String!
+  id: String!
+  quantity: BigDecimal!
+}
+
+enum AuctionType {
+  All
+  NotForSale
+  Sale
+}
+
+type Axie {
+  owner: String!
+  id: ID!
+  ownerProfile: PublicProfile
+  birthDate: Int!
+  genes: String!
+  newGenes: String
+  sireId: Int!
+  matronId: Int!
+  title: String
+  region: String
+  name: String!
+  breedCount: Int!
+  numMystic: Int
+  numJapan: Int
+  numXmas: Int
+  pureness: Int
+  purity: Int
+  stage: Int!
+  chain: String!
+  class: AxieClass
+  bodyShape: AxieBodyShape
+  parts: [AxiePart!]!
+  stats: AxieStats!
+  level: Int!
+  equipmentInstances: [EquipmentInstance!]
+  potentialPoints: PotentialPoints!
+  order: Order
+  sireClass: AxieClass
+  matronClass: AxieClass
+  children: [Axie!]!
+  image: String!
+  figure: AxieFigure!
+  transferHistory(from: Int, size: Int): TransferRecords!
+  ethereumTransferHistory(from: Int, size: Int): TransferRecords!
+  breedableWith(
+    criteria: AxieSearchCriteria
+    from: Int
+    size: Int
+    sort: SortBy
+  ): Axies!
+  battleInfo: AxieBattleInfo!
+  minPrice: String
+}
+
+type AxieBattleInfo {
+  banned: Boolean!
+  banUntil: Int
+  level: Int!
+}
+
+enum AxieBodyShape {
+  Normal
+  Fuzzy
+  Curly
+  Spiky
+  BigYak
+  Frosty
+  Sumo
+  WetDog
+  Wavy
+  NotNormal
+  NotFuzzy
+  NotCurly
+  NotSpiky
+  NotBigYak
+  NotFrosty
+  NotSumo
+  NotWetDog
+  NotWavy
+}
+
+type AxieCardAbility {
+  id: String!
+  description: String!
+  name: String!
+  attackType: AxieMoveType!
+  attack: Int!
+  defense: Int!
+  energy: Int!
+  backgroundUrl: String!
+  effectIconUrl: String!
+}
+
+enum AxieClass {
+  Beast
+  Bug
+  Bird
+  Plant
+  Aquatic
+  Reptile
+  Mech
+  Dawn
+  Dusk
+}
+
+type AxieFigure {
+  atlas: String!
+  model: String!
+  image: String!
+}
+
+enum AxieMoveType {
+  Melee
+  Ranged
+  Support
+}
+
+type AxiePart {
+  id: String!
+  name: String!
+  class: AxieClass!
+  type: AxiePartType!
+  specialGenes: SpecialGenes
+  stage: Int!
+  abilities: [AxieCardAbility!]!
+}
+
+enum AxiePartType {
+  Eyes
+  Ears
+  Back
+  Mouth
+  Horn
+  Tail
+}
+
+type Axies {
+  total: Int!
+  results: [Axie!]!
+}
+
+input AxieSearchCriteria {
+  bodyShapes: [AxieBodyShape!]
+  classes: [AxieClass!]
+  parts: [String!]
+  stages: [Int!]
+  numMystic: [Int!]
+  numJapan: [Int!]
+  numXmas: [Int!]
+  numSummer: [Int!]
+  numShiny: [Int!]
+  pureness: [Int!]
+  purity: [Int!]
+  title: [String!]
+  breedable: Boolean
+  breedCount: [Int!]
+  hp: [Int!]
+  speed: [Int!]
+  skill: [Int!]
+  morale: [Int!]
+  ppBeast: [Int!]
+  ppAquatic: [Int!]
+  ppPlant: [Int!]
+  ppBug: [Int!]
+  ppBird: [Int!]
+  ppReptile: [Int!]
+  ppMech: [Int!]
+  ppDawn: [Int!]
+  ppDusk: [Int!]
+  region: String
+  excludingList: [Int!]
+  chain: Chain
+}
+
+type AxiesEquipments {
+  axieId: Int!
+  equipments: [EquipmentInstance!]!
+}
+
+type AxieStats {
+  hp: Int!
+  speed: Int!
+  skill: Int!
+  morale: Int!
+}
+
+scalar BigDecimal
+
+type Bundle {
+  listingIndex: ID!
+  name: String!
+  owner: String!
+  order: Order
+  items: [LunaciaAsset!]!
+  transferHistory(from: Int, size: Int): TransferRecords!
+}
+
+type Bundles {
+  total: Int!
+  results: [Bundle!]!
+}
+
+input BundleSearchCriteria {
+  itemAlias: [String!]
+  itemType: [LandType!]
+  itemRarity: [Rarity!]
+  landType: [LandType!]
+  totalItems: [Int!]
+}
+
+enum Chain {
+  Ethereum
+  Ronin
+  All
+}
+
+type CommonMutationResult {
+  result: Boolean!
+  data: String
+}
+
+type Equipment {
+  instances(
+    from: Int! = 0
+    size: Int! = 10
+    sort: SortBy! = IdAsc
+  ): [EquipmentInstance!]
+  total: Int!
+  equippedTotal: Int!
+  lowestUnequippedTokenId: String
+  minPrice: String
+  alias: String!
+  equipmentType: Int!
+  slot: EquipmentSlot!
+  name: String!
+  rarity: Rarity!
+  collections: [String!]!
+}
+
+type EquipmentInstance {
+  tokenId: String!
+  owner: String!
+  equipmentId: Int!
+  alias: String!
+  equipmentType: Int!
+  slot: EquipmentSlot!
+  name: String!
+  rarity: Rarity!
+  collections: [String!]!
+  equippedBy: ID
+  order: Order
+  transferHistory: TransferRecords!
+}
+
+type EquipmentInstances {
+  total: Int!
+  results: [EquipmentInstance!]!
+}
+
+type Equipments {
+  total: Int!
+  results: [Equipment!]!
+}
+
+enum EquipmentSlot {
+  Air
+  Cheek
+  Hip
+  Neck
+  Ground
+}
+
+enum Erc {
+  Erc20
+  Erc721
+  Erc1155
+}
+
+type Erc1155Token {
+  total: Int!
+  tokenId: String
+  tokenType: Erc1155Type!
+  tokenAddress: String!
+  minPrice: String
+  transferHistory: TransferRecords!
+  orders(
+    maker: String
+    from: Int! = 0
+    size: Int! = 10
+    sort: SortBy! = Latest
+  ): Orders!
+}
+
+type Erc1155Tokens {
+  total: Int!
+  results: [Erc1155Token!]!
+}
+
+enum Erc1155Type {
+  Rune
+  Charm
+}
+
+type ExchangeRate {
+  eth: ExchangeRateCurrency!
+  axs: ExchangeRateCurrency!
+  slp: ExchangeRateCurrency!
+  usd: ExchangeRateCurrency!
+  usdc: ExchangeRateCurrency!
+  ron: ExchangeRateCurrency!
+}
+
+type ExchangeRateCurrency {
+  cny: Float!
+  eur: Float!
+  gbp: Float!
+  jpy: Float!
+  krw: Float!
+  myr: Float!
+  php: Float!
+  sgd: Float!
+  usd: Float!
+  vnd: Float!
+}
+
+input InputAsset {
+  erc: Erc!
+  address: String!
+  id: String!
+  quantity: BigDecimal!
+}
+
+input InputOrder {
+  assets: [InputAsset!]!
+  expiredAt: Int!
+  startedAt: Int!
+  basePrice: BigDecimal!
+  endedAt: Int!
+  endedPrice: BigDecimal!
+  nonce: Int!
+}
+
+type Items {
+  total: Int!
+  results: [LandItem!]!
+}
+
+input ItemSearchCriteria {
+  itemId: Int
+  tokenId: String
+  itemAlias: [String!]
+  landType: [LandType!]
+  rarity: [Rarity!]
+}
+
+type LandItem {
+  owner: String!
+  tokenId: ID!
+  ownerProfile: PublicProfile
+  tokenType: Int!
+  itemId: Int!
+  itemAlias: String!
+  landType: LandType!
+  rarity: Rarity!
+  name: String!
+  figureURL: String!
+  effects: String!
+  description: String!
+  order: Order
+  transferHistory(from: Int, size: Int): TransferRecords!
+  minPrice: String
+}
+
+type LandPlot {
+  owner: String!
+  tokenId: ID!
+  ownerProfile: PublicProfile
+  col: Int!
+  row: Int!
+  landType: LandType!
+  order: Order
+  transferHistory(from: Int, size: Int): TransferRecords!
+  minPrice: String
+}
+
+type Lands {
+  total: Int!
+  results: [LandPlot!]!
+}
+
+input LandSearchCriteria {
+  col: Int
+  row: Int
+  tokenId: String
+  landType: [LandType!]
+}
+
+enum LandType {
+  Genesis
+  Mystic
+  Arctic
+  Forest
+  Savannah
+  Unknown
+}
+
+union LunaciaAsset = LandItem | LandPlot
+
+type MarketSettlementStats {
+  last24Hours: SettlementStats!
+  last7Days: SettlementStats!
+  last30Days: SettlementStats!
+}
+
+type Mutation {
+  createRandomMessage: String!
+  renameAxie(axieId: ID!, name: String!): CommonMutationResult!
+  updateAccountSettings(
+    settings: UpdateAccountSettingsInput!
+  ): CommonMutationResult!
+  addReferralCode(code: String!): CommonMutationResult!
+  deleteReferralCode: CommonMutationResult!
+  changeScholarRole(
+    isOn: Boolean!
+    timestamp: Int!
+    signature: String!
+  ): CommonMutationResult!
+  morphAxie(axieId: ID!, owner: String!, signature: String!): Boolean!
+  redeemAxie(owner: String!, signature: String!): Boolean!
+  axieEquip(axieId: ID!, tokenIds: [BigDecimal!]!): [EquipmentInstance!]!
+  axieUnequip(axieId: ID!, slots: [EquipmentSlot!]!): [EquipmentInstance!]!
+  createOrder(order: InputOrder!, signature: String!): Order!
+}
+
+type NetAddresses {
+  ethereum: String
+  ronin: String
+}
+
+type Order {
+  id: Int!
+  currentPrice: String!
+  currentPriceUsd: String!
+  duration: Int!
+  timeLeft: Int!
+  suggestedPrice: String!
+  maker: String!
+  kind: OrderType!
+  assets: [Asset!]!
+  expiredAt: Int!
+  paymentToken: String!
+  startedAt: Int!
+  basePrice: BigDecimal!
+  endedAt: Int!
+  endedPrice: BigDecimal!
+  expectedState: String!
+  nonce: Int!
+  marketFeePercentage: Int!
+  signature: String!
+  hash: String!
+  addedAt: Int
+}
+
+type Orders {
+  total: Int!
+  quantity: Int!
+  data: [Order]!
+}
+
+enum OrderType {
+  Offer
+  Sell
+}
+
+type OverallMarketplaceStats {
+  newAxies: OverallMarketplaceStatsEntry!
+  originBattles: OverallMarketplaceStatsEntry!
+  mkpVolume: OverallMarketplaceStatsEntry!
+  mkpTxs: OverallMarketplaceStatsEntry!
+}
+
+type OverallMarketplaceStatsEntry {
+  last24H: BigDecimal!
+  last7D: BigDecimal!
+  last30D: BigDecimal!
+  allTime: BigDecimal!
+}
+
+enum PeriodType {
+  Last24H
+  Last7D
+  Last30D
+}
+
+type PotentialPoints {
+  beast: Int!
+  aquatic: Int!
+  plant: Int!
+  bug: Int!
+  bird: Int!
+  reptile: Int!
+  mech: Int!
+  dawn: Int!
+  dusk: Int!
+}
+
+type PublicProfile {
+  accountId: UUID!
+  addresses: NetAddresses!
+  name: String
+  activated: Boolean!
+}
+
+type Query {
+  profile(id: UUID): AccountProfile
+  publicProfile(id: UUID!): PublicProfile
+  publicProfileWithEthereumAddress(
+    address: String
+    ethereumAddress: String
+  ): PublicProfile
+  publicProfileWithRoninAddress(
+    address: String
+    roninAddress: String
+  ): PublicProfile
+  exchangeRate: ExchangeRate!
+  marketStats: MarketSettlementStats!
+  overallMarketStats: OverallMarketplaceStats!
+  topSales(
+    tokenType: TokenType!
+    periodType: PeriodType!
+    size: Int!
+  ): TopSales!
+  tokensStats: TokensStats!
+  releaseLeaderboard(
+    event: ReleaseOccasion!
+    from: Int
+    to: Int
+  ): ReleaseLeaderboard!
+  userReleaseRank(event: ReleaseOccasion!, user: String!): UserRank!
+  releaseEventSummary(event: ReleaseOccasion!): ReleaseSummary!
+  releaseSummary: ReleaseSummary!
+  order(hash: String!): Order
+  axie(axieId: ID!): Axie
+  axies(
+    auctionType: AuctionType
+    criteria: AxieSearchCriteria
+    owner: String
+    from: Int
+    size: Int
+    sort: SortBy
+  ): Axies!
+
+  # Land Plot schema
+  land(col: Int!, row: Int!): LandPlot
+  lands(
+    auctionType: AuctionType
+    criteria: LandSearchCriteria
+    owner: String
+    from: Int
+    size: Int
+    sort: SortBy
+  ): Lands!
+
+  # Land Item schema
+  item(itemId: Int!, itemAlias: String!): LandItem
+  items(
+    auctionType: AuctionType
+    criteria: ItemSearchCriteria
+    owner: String
+    from: Int
+    size: Int
+    sort: SortBy
+  ): Items!
+  equipmentInstance(equipmentType: Int!, equipmentId: Int!): EquipmentInstance
+  equipmentInstances(
+    owner: String
+    from: Int! = 0
+    size: Int! = 10
+    auctionType: AuctionType
+    sort: SortBy
+  ): EquipmentInstances
+  equipment(
+    owner: String
+    equipmentType: Int!
+    auctionType: AuctionType
+  ): Equipment
+  equipments(
+    owner: String
+    from: Int! = 0
+    size: Int! = 10
+    auctionType: AuctionType
+  ): Equipments
+  erc1155Token(
+    owner: String
+    tokenType: Erc1155Type!
+    tokenId: String
+  ): Erc1155Token
+  erc1155Tokens(
+    owner: String
+    tokenType: Erc1155Type
+    tokenIds: [String!]! = []
+    from: Int! = 0
+    size: Int! = 10
+  ): Erc1155Tokens!
+
+  # Bundle schema
+  bundle(listingIndex: Int!): Bundle
+  bundles(
+    seller: String
+    criteria: BundleSearchCriteria
+    from: Int
+    size: Int
+    sort: SortBy
+  ): Bundles!
+  settledAuctions: SettledAuctions!
+}
+
+enum Rarity {
+  Mystic
+  Epic
+  Rare
+  Common
+}
+
+type ReleaseLeaderboard {
+  users: [UserRank!]!
+}
+
+enum ReleaseOccasion {
+  ForFun
+  LunarNewYear2022
+  Xmas2022
+}
+
+type ReleaseSummary {
+  participants: Int!
+  axiesReleased: Int!
+}
+
+type SettledAuctions {
+  axies(from: Int, size: Int): Axies!
+  lands(from: Int, size: Int): Lands!
+  items(from: Int, size: Int): Items!
+  equipments(from: Int, size: Int): EquipmentInstances!
+  erc1155Tokens(tokenType: Erc1155Type!, from: Int, size: Int): Erc1155Tokens!
+  bundles(from: Int, size: Int): Bundles!
+}
+
+type SettlementStats {
+  count: Int!
+  axieCount: Int!
+  volume: String!
+  volumeUsd: String!
+}
+
+input SignatureInput {
+  mainnet: String!
+  owner: String!
+  message: String!
+  signature: String!
+}
+
+enum SortBy {
+  IdAsc
+  IdDesc
+  PriceAsc
+  PriceDesc
+  Latest
+  QuantityAsc
+  QuantityDesc
+}
+
+enum SpecialGenes {
+  Bionic
+  Japan
+  Mystic
+  Summer2022
+  Xmas2018
+  Xmas2019
+}
+
+union TokenAsset = Axie | LandPlot | LandItem | Erc1155Token | EquipmentInstance
+
+type TokensStats {
+  axie: TokenStats!
+}
+
+type TokenStats {
+  totalSupply: String!
+  holders: Int!
+}
+
+enum TokenType {
+  All
+  Axie
+  Item
+  Land
+  Rune
+  Charm
+  Equipment
+}
+
+type TopSale {
+  orderId: Int!
+  timestamp: Int!
+  settlePrice: String!
+  settlePriceUsd: String!
+  tokenAsset: TokenAsset!
+}
+
+type TopSales {
+  results: [TopSale!]!
+}
+
+type TransferRecord {
+  tokenId: String!
+  from: String!
+  to: String!
+  fromProfile: PublicProfile
+  toProfile: PublicProfile
+  withPrice: String!
+  withPriceUsd: String!
+  timestamp: Int!
+  txHash: String!
+}
+
+type TransferRecords {
+  total: Int!
+  results: [TransferRecord!]!
+}
+
+input UpdateAccountSettingsInput {
+  unsubscribeEmail: Boolean!
+}
+
+type UpdateProfileNameResult {
+  result: Boolean!
+  accountProfile: AccountProfile
+}
+
+type UserRank {
+  user: String!
+  userProfile: PublicProfile
+  released: Int!
+  rank: Int
+}
+
+# A UUID is a unique 128-bit number, stored as 16 octets. UUIDs are parsed as
+# Strings within GraphQL. UUIDs are used to assign unique identifiers to
+# entities without requiring a central allocating authority.
+#
+# # References
+#
+# * [Wikipedia: Universally Unique Identifier](http://en.wikipedia.org/wiki/Universally_unique_identifier)
+# * [RFC4122: A Universally Unique IDentifier (UUID) URN Namespace](http://tools.ietf.org/html/rfc4122)
+scalar UUID
