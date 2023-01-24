@@ -71,9 +71,9 @@
             "example": "5"
           }
         ],
-        "security" : {
+        "security" : [{
           "api_key" : []
-        },
+        }],
         "responses": {
           "200": {
             "description": "OK",
